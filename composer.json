@@ -1,5 +1,5 @@
 {
-    "name": "lummy/Laravel-vue-api-crud-generator",
+    "name": "lummy/laravel-vue-api-crud-generator",
     "description": "Creates a basic skeleton for a CRUD app in both Laravel & Vue.js single file templates",
     "authors": [
         {
