@@ -8,5 +8,12 @@
         }
     ],
     "license": "MIT",
-    "require": {}
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "lummy\vueApi\vueApiServiceProvider::class"
+            ]
+        }
+    },
 }
