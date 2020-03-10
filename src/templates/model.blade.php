@@ -10,7 +10,7 @@ class {{ $plural }} extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        ''
     ];
 
     /**
@@ -19,7 +19,7 @@ class {{ $plural }} extends Model
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        ''
     ];
 
     /**
@@ -28,6 +28,6 @@ class {{ $plural }} extends Model
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        '',
     ];
 }

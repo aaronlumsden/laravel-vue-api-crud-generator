@@ -22,8 +22,7 @@ class vueApiServiceProvider extends ServiceProvider
       $this->mergeConfigFrom(
           __DIR__ . '/config/vueApi.php', 'vueApi'
       );
-      
-        $this->app->make('lummy\vueApi\AaronsController');
+    
         $this->commands($this->commands);
     }
 

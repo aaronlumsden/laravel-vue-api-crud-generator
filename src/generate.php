@@ -8,6 +8,7 @@ use Storage;
 use View;
 use Log;
 
+//composer dump-autoload
 // To publish config file 
 // php artisan vendor:publish --provider="lummy\vueApi\vueApiServiceProvider" --tag="config"
 

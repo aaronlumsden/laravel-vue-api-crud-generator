@@ -5,7 +5,9 @@ I created this package because I was tired of doing the same things over and ove
 - A Model
 - A Controller
 - Add the routes 
-- Create a single view component
+- Create a Vue.js single file component to list all the items for my model 
+- Create a Vue.js single file component to list a single item
+- Create a form in Vue.js to communicate with my Laravel api
 
 This package aims to speed up this process by creating all of the above in a single artisan command.
 
