@@ -7,5 +7,6 @@
             "email": "aaronlumsden@me.com"
         }
     ],
+    "license": "MIT",
     "require": {}
 }
