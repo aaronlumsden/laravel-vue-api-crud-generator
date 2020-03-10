@@ -1,0 +1,11 @@
+{
+    "name": "lummy/vueApi",
+    "description": "Creates a basic skeleton for a CRUD app in both Laravel & Vue.js single file templates",
+    "authors": [
+        {
+            "name": "Aaron Lumsden",
+            "email": "aaronlumsden@me.com"
+        }
+    ],
+    "require": {}
+}
