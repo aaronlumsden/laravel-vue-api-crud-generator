@@ -1,5 +1,9 @@
 ## Laravel Vue API Crud Generator
 
+### Installation
+`composer require lummy/laravel-vue-api-crud-generator`
+
+### Overview
 I created this package because I was tired of doing the same things over and over again. Each time I created a new model on a Laravel/Vue project I would create:
 
 - A Model
