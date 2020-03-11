@@ -12,7 +12,7 @@
     "extra": {
     "laravel": {
           "providers": [
-              "lummy\\vueApi\\vueApiServiceProvider::class"
+              "lummy\\vueApi\\vueApiServiceProvider"
           ]
       }
   }
