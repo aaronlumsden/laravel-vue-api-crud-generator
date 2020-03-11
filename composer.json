@@ -9,16 +9,16 @@
     ],
     "license": "MIT",
     "require": {},
+    "autoload": {
+        "psr-4": {
+            "lummy\\": "src/"
+        }
+    },
     "extra": {
     "laravel": {
           "providers": [
               "lummy\\vueApi\\vueApiServiceProvider"
           ]
-    },
-    "autoload": {
-        "psr-4": {
-            "lummy\\vueApi\\": "src/"
-        }
-    },
+    }
   }
 }
