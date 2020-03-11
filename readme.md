@@ -17,7 +17,7 @@ This package aims to speed up this process by creating all of the above in a sin
 
 It creates the basic skeleton for a CRUD app in both Laravel & Vue.js single file templates.
 
-Simply run the artisan command:
+Simply run this artisan command:
 
 `php artisan vueapi:create {model}`
 
