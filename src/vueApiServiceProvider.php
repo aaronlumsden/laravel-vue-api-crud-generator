@@ -8,7 +8,7 @@ class vueApiServiceProvider extends ServiceProvider
 {
   
   protected $commands = [
-      'lummy\vueApi\generate'
+      'lummy\vueApi\create'
   ];
   
     /**

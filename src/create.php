@@ -26,14 +26,14 @@ class create extends Command
      *
      * @var string
      */
-    protected $signature = 'vueapi:generate {model}';
+    protected $signature = 'vueapi:create {model}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Generated the routes, controller & Vue.js single file templates';
+    protected $description = 'Creates a model and the migration file';
 
     /**
      * Create a new command instance.
@@ -45,7 +45,26 @@ class create extends Command
         parent::__construct();
     }
     
-  
+    
+    public function createModel($singular, $plural){
+      
+      $client = Storage::createLocalDriver(['root' => config('vueApi.model_dir')]);
+      
+      // Check if file already exists. If it does ask if we want to overwrite
+      if ($client->exists($singular)) {    
+        if (!$this->confirm($singular.' model already exists. Would you like to overwrite this model?')){
+            return false;    
+        } 
+      } 
+        
+      // Create the file
+      $modelTemplate = View::make('vueApi::model',['singular' => $singular, 'plural' => $plural])->render();
+      $modelTemplate = "<?php \n".$modelTemplate." ?>";
+      $client->put($plural.'.php', $modelTemplate );
+
+      return;
+      
+    }
     
     public function createController($singular, $plural){
       
@@ -53,7 +72,7 @@ class create extends Command
       
       // Check if file already exists. If it does ask if we want to overwrite
       if ($client->exists($plural.'Controller.php')) {    
-        if (!$this->confirm($plural.'Controller.php already exists. Would you like to overwrite this controller?')){
+        if (!$this->confirm($plural.'Controller.php already exists. Would you like to overwrite this controller? [yes|no]')){
             return false;    
         } 
       } 
@@ -74,7 +93,7 @@ class create extends Command
       
       // Check if file already exists. If it does ask if we want to overwrite
       if ($client->exists($plural.'-list.vue')) {
-        if (!$this->confirm($plural.'-list.vue already exists. Would you like to overwrite this component?')) {
+        if (!$this->confirm($plural.'-list.vue already exists. Would you like to overwrite this component? [yes|no]')) {
           return false;
         }
       } 
@@ -121,20 +140,19 @@ class create extends Command
      */
     public function handle()
     {
-      
-        //Artisan::call('migrate');
         
         $singular = Str::camel($this->argument('model'));
         $singular = Ucfirst(Str::singular($singular));
         $plural = Ucfirst(Str::plural($singular));
         
-        $this->createRoutes($singular, $plural);
-        $this->createController($singular, $plural);
-        $this->createVueListTemplate($singular, $plural);
+        //$this->createRoutes($singular, $plural);
+        $this->createModel($singular, $plural);
+        //$this->createController($singular, $plural);
+        //$this->createVueListTemplate($singular, $plural);
         
-        //Artisan::call('make:migration create'.$plural.'_table');
+        Artisan::call('make:migration create'.$plural.'_table');
         
-        return $this->info('Created '.$singular.'Controller.php, '.$singular.'.vue and the routes in '.config('vueApi.routes_file'));
+        return $this->info('Created '.$plural.'.php model and "create'.$plural.'_table" migration file.');
     
     }
 }
