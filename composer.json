@@ -16,8 +16,11 @@
           ]
     },
     "autoload": {
+      "classmap": [
+            "src"
+        ],
         "psr-4": {
-            "lummy\\vueapi\\": "packages/lummy/vueApi/src/"
+            "lummy\\vueApi\\": "packages/lummy/vueApi/src/"
         }
     },
   }
