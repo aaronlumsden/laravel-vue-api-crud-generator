@@ -51,7 +51,7 @@ class generate extends Command
       
       // Check if file already exists. If it does ask if we want to overwrite
       if ($client->exists($singular)) {    
-        if (!$this->confirm($singular.' model already exists. Would you like to overwrite this model? [yes|no]')){
+        if (!$this->confirm($singular.' model already exists. Would you like to overwrite this model?')){
             return false;    
         } 
       } 
