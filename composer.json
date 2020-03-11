@@ -1,13 +1,12 @@
 {
     "name": "lummy/laravel-vue-api-crud-generator",
-    "description": "Creates a basic skeleton for a CRUD app in both Laravel & Vue.js single file components",
+    "description": "Creates a basic skeleton for a CRUD app in both Laravel & Vue.js single file components.",
     "authors": [
         {
             "name": "Aaron Lumsden",
             "email": "aaronlumsden@me.com"
         }
     ],
-    "version" : "1.0.0",
     "license": "MIT",
     "require": {},
     "extra": {
