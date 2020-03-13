@@ -1,16 +1,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\{{ $name }};
+use App\{{ $plural }};
 
-class {{ $name }} extends Controller
+class {{ $plural }}Controller extends Controller
 {
     public function get(Request $request, $id){
-      return {{ $name }}::findOrFail($id);
+      return {{ $plural }}::findOrFail($id);
     }
     
     public function list(Request $request){
-      return {{ $name }}::get();
+      return {{ $plural }}::get();
     }
     
     public function create(Request $request){
@@ -26,8 +26,8 @@ class {{ $name }} extends Controller
           ]);
       
         $input = $request->all();
-        ${{ $name }} = {{ $name }}::create($input)->save();
-        return ${{ $name }};
+        ${{ $plural }} = {{ $plural }}::create($input)->save();
+        return ${{ $plural }};
     }
     
     public function update(Request $request, $id){
@@ -43,14 +43,14 @@ class {{ $name }} extends Controller
       ]);
       
       
-        ${{ $name }} = {{ $name }}::findOrFail($id);
+        ${{ $plural }} = {{ $plural }}::findOrFail($id);
         $input = $request->all();
-        ${{ $name }}->fill($input)->save();
-        return ${{ $name }};
+        ${{ $plural }}->fill($input)->save();
+        return ${{ $plural }};
     }
     
     public function delete(Request $request, $id){
-        ${{$name}} = {{$name}}::findOrFail($id);
-        ${{$name}}->destroy();
+        ${{$plural}} = {{$plural}}::findOrFail($id);
+        ${{$plural}}->destroy();
     }
 }

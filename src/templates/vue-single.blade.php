@@ -20,11 +20,12 @@ export default {
       {{ $singular }}: false,
       {{ $plural }} : false,
       form: new Form(@json($fields,JSON_PRETTY_PRINT))
+    }
   },
   created: function(){
     this.get{{$singular}}();
   },
-  methods: function(){
+  methods: {
     get{{$singular}}: function({{$singular}}){
       
       var that = this;

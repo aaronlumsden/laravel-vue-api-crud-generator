@@ -37,7 +37,7 @@ export default {
   created: function(){
     this.list{{$plural}}();
   },
-  methods: function(){
+  methods: {
     list{{ $plural }}: function(){
       
       var that = this;

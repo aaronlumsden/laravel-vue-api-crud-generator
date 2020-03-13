@@ -80,9 +80,9 @@ class generate extends Command
       } 
       
       $formData = $this->createFormData($plural);
-        
+      
       // Create the file
-      $controllerTemplate = view::make('vueApi::controller',['name' => $singular,'validatorString'=>$formData['validator']])->render();
+      $controllerTemplate = view::make('vueApi::controller',['name' => $singular,'plural'=>ucfirst($plural),'validatorString'=>$formData['validator']])->render();
       $controllerTemplate = "<?php \n".$controllerTemplate." ?>";
       $client->put($plural.'Controller.php', $controllerTemplate );
 
@@ -143,7 +143,7 @@ class generate extends Command
     public function createRoutes($singular, $plural){
       
       $client = Storage::createLocalDriver(['root' => config('vueApi.routes_dir')]);
-      $plural = strtolower($plural);
+      $plural = Ucfirst(strtolower($plural));
       $routes = "\nRoute::get('".$plural."', '".$plural."Controller@list');\n";
       $routes .= "Route::get('".$plural."/{id}', '".$plural."Controller@get');\n";
       $routes .= "Route::post('".$plural."', '".$plural."Controller@create');\n";
@@ -174,6 +174,8 @@ class generate extends Command
 
       foreach ($data as $key) {
         
+
+        
         $vform .= "\t\t\t\t\t<div class='form-group'>\n";
         $vform .= "\t\t\t\t\t\t<label>".$key->Field."</label>\n";
         
@@ -182,14 +184,16 @@ class generate extends Command
         
         preg_match_all('!\d+!', $key->Type, $matches);
         
+        
+      
         $lengthValue = (isset($matches[0][0])) ? 'size:'.array_push($thisValidations,'size:'.$matches[0][0]) : '';
         
-        $inputLength = (isset($matches[0][0])) ? "'maxlength=".$matches[0][0]."'" : '';
+        $inputLength = (isset($matches[0][0])) ? "maxlength='".$matches[0][0]."'" : '';
         
         $fieldsArray[$key->Field] = '';
         
         
-        if ($thisValidations) {
+        if ($thisValidations && $key->Field !== 'id' && $key->Field !== 'created_at' && $key->Field !== 'updated_at') {
           $validatorArray[0][$key->Field] = implode('|',$thisValidations);
           
           if ($key->Null == 'YES') {
@@ -239,6 +243,10 @@ class generate extends Command
           }
           
           $vform.="</select>\n";
+        }
+        
+        if ($thisValidations) {
+          $vform.="\t\t\t\t\t\t<has-error :form='form' field='".$key->Field."'></has-error>\n";
         }
         
         
