@@ -186,7 +186,7 @@ class generate extends Command
         
         
       
-        $lengthValue = (isset($matches[0][0])) ? 'size:'.array_push($thisValidations,'size:'.$matches[0][0]) : '';
+        $lengthValue = (isset($matches[0][0])) ? 'max:'.array_push($thisValidations,'max:'.$matches[0][0]) : '';
         
         $inputLength = (isset($matches[0][0])) ? "maxlength='".$matches[0][0]."'" : '';
         

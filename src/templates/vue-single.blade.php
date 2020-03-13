@@ -4,7 +4,8 @@
         <form @submit.prevent="update{{$singular}}">
         {!! $htmlForm !!}
           <div class="form-group">
-              <button type="submit" :disabled="form.busy" name="button">@{{ (form.busy) ? 'Please wait...' : 'Submit'}}</button>
+              <button type="submit" :disabled="form.busy" name="button">@{{ (form.busy) ? 'Please wait...' : 'Update'}}</button>
+              <button @click.prevent="delete{{$singular}}">@{{ (form.busy) ? 'Please wait...' : 'Delete'}}</button>
           </div>
         </form>
       </div>
@@ -29,7 +30,7 @@ export default {
     get{{$singular}}: function({{$singular}}){
       
       var that = this;
-      this.form.get('/{{ $plural }}/'+{{$singular}}.id).then(function(response){
+      this.form.get('/{{ $plural }}/'+this.$route.params.id).then(function(response){
         that.form.fill(response.data);
       })
       
@@ -37,7 +38,7 @@ export default {
     update{{$singular}}: function(){
       
       var that = this;
-      this.form.put('/{{ $plural }}/'+form.id).then(function(response){
+      this.form.put('/{{ $plural }}/'+this.$route.params.id).then(function(response){
         that.form.fill(response.data);
       })
       
@@ -45,7 +46,7 @@ export default {
     delete{{$singular}}: function(){
       
       var that = this;
-      this.form.delete('/{{ $plural }}/'+form.id).then(function(response){
+      this.form.delete('/{{ $plural }}/'+this.$route.params.id).then(function(response){
         that.form.fill(response.data);
       })
       

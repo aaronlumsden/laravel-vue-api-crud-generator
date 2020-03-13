@@ -27,6 +27,8 @@ class {{ $plural }}Controller extends Controller
       
         $input = $request->all();
         ${{ $plural }} = {{ $plural }}::create($input)->save();
+        ${{ $plural }}->save();
+        
         return ${{ $plural }};
     }
     
@@ -51,6 +53,6 @@ class {{ $plural }}Controller extends Controller
     
     public function delete(Request $request, $id){
         ${{$plural}} = {{$plural}}::findOrFail($id);
-        ${{$plural}}->destroy();
+        ${{$plural}}->delete();
     }
 }

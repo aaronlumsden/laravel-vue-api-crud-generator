@@ -6,8 +6,8 @@
         <ul v-if="{{ $plural }}">
           <li v-for="({{ $singular }},index) in {{ $plural }}" :key="{{ $singular }}.id">
             
-            {{ $singular }}
-            <a @click.prevent="delete{{$singular}}({{ $singular }})" href="#">Delete</a>
+            {{ $singular }} 
+            <a @click.prevent="delete{{$singular}}({{ $singular }},index)" href="#">Delete</a>
           </li>
         </ul>
         
@@ -30,7 +30,7 @@ export default {
   components: {HasError},
   data: function(){
     return {
-      {{ $plural }} : false,
+      {{ $plural }} : [],
       form: new Form(@json($fields,JSON_PRETTY_PRINT))
     }
   },
@@ -50,15 +50,17 @@ export default {
       
       var that = this;
       this.form.post('/{{ $plural }}').then(function(response){
-        that.form.fill(response.data);
+        that.{{ $plural }}.push(response.data);
       })
       
     },
-    delete{{$singular}}: function({{ $singular }}){
+    delete{{$singular}}: function({{ $singular }}, index){
       
       var that = this;
       this.form.delete('/{{ $plural }}/'+{{ $singular }}.id).then(function(response){
-        that.form.fill(response.data);
+        
+        that.{{ $plural }}.splice(index,1);
+        
       })
       
     }
