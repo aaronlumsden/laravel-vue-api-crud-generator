@@ -1,10 +1,10 @@
 ## Laravel Vue API Crud Generator
 
 #### Overview
-A Laravel package that lets you generate boilerplate code for your Vue.js. Simply enter the name of a database table and based on that it will create:
+A Laravel package that lets you generate boilerplate code for a Vue.js/Laravel app. Simply enter the name of a database table and based on that it will create:
 
 - A Laravel model
-- A Laravel controller (with get, list, create, update, delete as well as validation based on your DB table)
+- A Laravel controller (with get, list, create, update, delete as well as validation based on a chosen DB table)
 - Laravel routes (get, list, create, update, delete)
 - 2 Vue.js single file components to create, update, list, delete and show (using Vform & axios)
 
@@ -45,6 +45,8 @@ Once you have run this command, using the `posts` example above, it will create 
 
 ### Routes 
 
+Based on a `posts` DB table it will produce these routes
+
 ```
 Route::get('posts', 'PostsController@list');
 Route::get('posts/{id}', 'PostsController@get');
@@ -55,6 +57,9 @@ Route::delete('posts/{id}', 'PostsController@delete');
 ```
 
 ### Controller
+
+Based on a `posts` DB table it will produce this controller
+
 ```
 <?php 
 namespace App\Http\Controllers;
@@ -122,6 +127,8 @@ class Post extends Controller
 ```
 ### Model 
 
+Based on a `posts` DB table it will produce this model
+
 ```
 <?php 
 namespace App;
@@ -161,6 +168,8 @@ class Songs extends Model
 ```
 
 ### Vue (List template)
+
+Based on a `posts` DB table it will produce this Vue.js list single file component
 
 ```
 
@@ -271,6 +280,8 @@ export default {
 ```
 
 ### Vue (Single template)
+
+Based on a `posts` DB table it will produce this Vue.js single file component
 
 ```
 <template lang="html">
@@ -412,6 +423,26 @@ If you use another frontend framework such as React or you want to adjust the st
 They will then appear in
 
 `\resources\views\vendor\vueApi`
+
+
+#### Variables in the templates
+
+##### $singular (all templates)
+The singular name for the DB table eg post
+
+##### $plural (all templates)
+The singular name for the DB table eg posts
+
+##### $validatorString (Controller template)
+This outputs the array for Laravel validation
+
+##### $htmlForm (Vue-list & Vue-single)
+This outputs the html form
+
+##### $fields (Vue-list & Vue-single)
+This outputs a javascript object of the fields
+
+
 
 
 
