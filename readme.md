@@ -1,18 +1,17 @@
 ## Laravel Vue API Crud Generator
 
-### Installation
-`composer require lummy/laravel-vue-api-crud-generator`
-
 #### Overview
-A Laravel package that lets you generate boilerplate code. Simply enter the name of a database table and based on that it will create 
+A Laravel package that lets you generate boilerplate code for your Vue.js. Simply enter the name of a database table and based on that it will create:
 
 - A Laravel model
 - A Laravel controller (with get, list, create, update, delete as well as validation based on your DB table)
 - Laravel routes (get, list, create, update, delete)
 - 2 Vue.js single file components to create, update, list, delete and show (using Vform & axios)
 
-
 This package aims to speed up the process of communicating between backend (Laravel) and frontend (Vue.js).
+
+### Installation
+`composer require lummy/laravel-vue-api-crud-generator`
 
 
 ## Usage
