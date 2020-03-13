@@ -40,6 +40,13 @@ class vueApiServiceProvider extends ServiceProvider
         $this->publishes([
              __DIR__ . '/config/vueApi.php' => config_path('vueApi.php'),
          ], 'config');
+         
+    
+        
+        $this->publishes([
+         __DIR__.'/templates' => resource_path('views/vendor/vueApi'),
+       ],'templates');
+         
     }
     
     

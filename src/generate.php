@@ -58,7 +58,7 @@ class generate extends Command
       } 
         
       // Create the file
-      $modelTemplate = View::make('vueApi::model',['singular' => $singular, 'plural' => $plural])->render();
+      $modelTemplate = view::make('vueApi::model',['singular' => $singular, 'plural' => $plural])->render();
       $modelTemplate = "<?php \n".$modelTemplate." ?>";
       $client->put($plural.'.php', $modelTemplate );
 
@@ -82,7 +82,7 @@ class generate extends Command
       $formData = $this->createFormData($plural);
         
       // Create the file
-      $controllerTemplate = View::make('vueApi::controller',['name' => $singular,'validatorString'=>$formData['validator']])->render();
+      $controllerTemplate = view::make('vueApi::controller',['name' => $singular,'validatorString'=>$formData['validator']])->render();
       $controllerTemplate = "<?php \n".$controllerTemplate." ?>";
       $client->put($plural.'Controller.php', $controllerTemplate );
 
@@ -109,7 +109,7 @@ class generate extends Command
       //['htmlForm'=>$vform,'validator' => $validatorArray,'fields'=>$fieldsArray];
       
       // Create the file
-      $vueTemplate = View::make('vueApi::vue-list',['singular' => strtolower($singular),'plural'=>strtolower($plural),'htmlForm'=>$formData['htmlForm'],'fields'=>$formData['fields']])->render();
+      $vueTemplate = view::make('vueApi::vue-list',['singular' => strtolower($singular),'plural'=>strtolower($plural),'htmlForm'=>$formData['htmlForm'],'fields'=>$formData['fields']])->render();
       $client->put($plural.'-list.vue', $vueTemplate );
       
       return;
@@ -132,7 +132,7 @@ class generate extends Command
   
   
       // Create the file
-      $vueTemplate = View::make('vueApi::vue-single',['singular' => strtolower($singular),'plural'=> strtolower($plural),'htmlForm'=>$formData['htmlForm'],'fields'=>$formData['fields']])->render();
+      $vueTemplate = view::make('vueApi::vue-single',['singular' => strtolower($singular),'plural'=> strtolower($plural),'htmlForm'=>$formData['htmlForm'],'fields'=>$formData['fields']])->render();
       $client->put($plural.'-single.vue', $vueTemplate );
       
       return;
