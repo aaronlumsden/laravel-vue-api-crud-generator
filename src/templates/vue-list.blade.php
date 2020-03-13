@@ -11,7 +11,14 @@
           </li>
         </ul>
         
-        <h2></h2>
+        <h2>Create {{$singular}}</h2>
+        
+        <form @submit.prevent="create{{ $singular }}">
+        {!! $htmlForm !!}
+          <div class="form-group">
+              <button type="submit" :disabled="form.busy" name="button">@{{ (form.busy) ? 'Please wait...' : 'Submit'}}</button>
+          </div>
+        </form>
         
       </div>
 </template>
@@ -23,7 +30,8 @@ export default {
   components: {HasError},
   data: function(){
     return {
-      {{ $plural }} : false
+      {{ $plural }} : false,
+      form: new Form(@json($fields,JSON_PRETTY_PRINT))
     }
   },
   created: function(){
@@ -59,4 +67,7 @@ export default {
 </script>
 
 <style lang="less">
+.{{ $plural }}{
+  
+}
 </style>

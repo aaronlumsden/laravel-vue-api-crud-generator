@@ -1,5 +1,12 @@
 <template lang="html">
       <div class="{{ $singular }}">
+        
+        <form @submit.prevent="update{{$singular}}">
+        {!! $htmlForm !!}
+          <div class="form-group">
+              <button type="submit" :disabled="form.busy" name="button">@{{ (form.busy) ? 'Please wait...' : 'Submit'}}</button>
+          </div>
+        </form>
       </div>
 </template>
 
@@ -12,10 +19,7 @@ export default {
     return {
       {{ $singular }}: false,
       {{ $plural }} : false,
-      form: new Form{
-        
-      }
-    }
+      form: new Form(@json($fields,JSON_PRETTY_PRINT))
   },
   created: function(){
     this.get{{$singular}}();
@@ -50,4 +54,7 @@ export default {
 </script>
 
 <style lang="less">
+.{{ $singular }}{
+  
+}
 </style>

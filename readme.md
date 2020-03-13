@@ -15,24 +15,45 @@ I created this package because I was tired of doing the same things over and ove
 
 This package aims to speed up this process by creating all of the above in a single artisan command.
 
-It creates the basic skeleton for a CRUD app in both Laravel & Vue.js single file templates.
 
-Simply run the artisan command:
+## Usage
 
-`php artisan vueapi:create {model}`
+Firstly you should create a new migration in the sam way that you would usally. For example if creating a posts table use the command 
 
-Replace `{model}` with your model name eg `posts`
+`php artisan make:migration create_posts_table`
+
+Then in your migration file add your fields as usual
+
+```
+Schema::create('posts', function (Blueprint $table) {
+    $table->id();
+    $table->string('title',200);
+    $table->text('content')->nullable();
+    $table->timestamps();
+});
+```
+
+Then run the migrate command to create the posts table 
+
+`php artisan migrate`
+
+Once you have done that you just need to run one command. Add the name of your table to the end of the command so in this case it's posts.
+
+`php artisan vueapi:generate posts`
+
+This will then generate a basic skeleton for a CRUD app in both Laravel & Vue.js single file templates.
+
 
 Once you have run this command, using the `posts` example above, it will create the following skeleton files:
 
 ### Routes 
 
 ```
-Route::get('Posts', 'PostsController@list');
-Route::get('Posts/{id}', 'PostsController@get');
-Route::post('Posts', 'PostsController@create');
-Route::put('Posts/{id}', 'PostsController@update');
-Route::delete('Posts/{id}', 'PostsController@delete');
+Route::get('posts', 'PostsController@list');
+Route::get('posts/{id}', 'PostsController@get');
+Route::post('posts', 'PostsController@create');
+Route::put('posts/{id}', 'PostsController@update');
+Route::delete('posts/{id}', 'PostsController@delete');
 
 ```
 

@@ -8,7 +8,7 @@ class vueApiServiceProvider extends ServiceProvider
 {
   
   protected $commands = [
-      'lummy\vueApi\create'
+      'lummy\vueApi\generate'
   ];
   
     /**
@@ -33,7 +33,7 @@ class vueApiServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        include __DIR__.'/routes.php';
+
         
          $this->loadViewsFrom(__DIR__.'/templates', 'vueApi');
         
