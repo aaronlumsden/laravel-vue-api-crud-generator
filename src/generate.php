@@ -46,21 +46,21 @@ class generate extends Command
         parent::__construct();
     }
     
-    public function createModel($singular, $plural){
+    public function createModel($data){
       
       $client = Storage::createLocalDriver(['root' => config('vueApi.model_dir')]);
       
       // Check if file already exists. If it does ask if we want to overwrite
-      if ($client->exists($singular)) {    
-        if (!$this->confirm($singular.' model already exists. Would you like to overwrite this model?')){
+      if ($client->exists($data['singular'])) {    
+        if (!$this->confirm($data['singular'].' model already exists. Would you like to overwrite this model?')){
             return false;    
         } 
       } 
         
       // Create the file
-      $modelTemplate = view::make('vueApi::model',['singular' => $singular, 'plural' => $plural])->render();
+      $modelTemplate = view::make('vueApi::model',['data' => $data])->render();
       $modelTemplate = "<?php \n".$modelTemplate." ?>";
-      $client->put($plural.'.php', $modelTemplate );
+      $client->put($data['plural'].'.php', $modelTemplate );
 
       return;
       
@@ -68,87 +68,81 @@ class generate extends Command
     
   
     
-    public function createController($singular, $plural){
+    public function createController($data){
       
       $client = Storage::createLocalDriver(['root' => config('vueApi.controller_dir')]);
       
       // Check if file already exists. If it does ask if we want to overwrite
-      if ($client->exists($plural.'Controller.php')) {    
-        if (!$this->confirm($plural.'Controller.php already exists. Would you like to overwrite this controller?')){
+      if ($client->exists($data['plural'].'Controller.php')) {    
+        if (!$this->confirm($data['plural'].'Controller.php already exists. Would you like to overwrite this controller?')){
             return false;    
         } 
       } 
       
-      $formData = $this->createFormData($plural);
+    //  $formData = $this->createFormData($plural);
       
       // Create the file
-      $controllerTemplate = view::make('vueApi::controller',['name' => $singular,'plural'=>ucfirst($plural),'validatorString'=>$formData['validator']])->render();
+      $controllerTemplate = view::make('vueApi::controller',['data' => $data])->render();
       $controllerTemplate = "<?php \n".$controllerTemplate." ?>";
-      $client->put($plural.'Controller.php', $controllerTemplate );
+      $client->put($data['plural'].'Controller.php', $controllerTemplate );
 
       return;
       
     }
     
     
-    public function createVueListTemplate($singular,$plural){
+    public function createVueListTemplate($data){
       
       $client = Storage::createLocalDriver(['root' => config('vueApi.vue_files_dir')]);
       
       // Check if file already exists. If it does ask if we want to overwrite
-      if ($client->exists($plural.'-list.vue')) {
-        if (!$this->confirm($plural.'-list.vue already exists. Would you like to overwrite this component?')) {
+      if ($client->exists($data['plural'].'-list.vue')) {
+        if (!$this->confirm($data['plural'].'-list.vue already exists. Would you like to overwrite this component?')) {
           return false;
         }
       } 
-      
-     $formData = $this->createFormData($plural);
-     
-  
-      
-      //['htmlForm'=>$vform,'validator' => $validatorArray,'fields'=>$fieldsArray];
-      
+
       // Create the file
-      $vueTemplate = view::make('vueApi::vue-list',['singular' => strtolower($singular),'plural'=>strtolower($plural),'htmlForm'=>$formData['htmlForm'],'fields'=>$formData['fields']])->render();
-      $client->put($plural.'-list.vue', $vueTemplate );
+      $vueTemplate = view::make('vueApi::vue-list',['data' => $data])->render();
+      $client->put($data['plural'].'-list.vue', $vueTemplate );
       
       return;
       
     }
     
-    public function createVueSingleTemplate($singular, $plural){
+    public function createVueSingleTemplate($data){
       
       $client = Storage::createLocalDriver(['root' => config('vueApi.vue_files_dir')]);
       
       // Check if file already exists. If it does ask if we want to overwrite
-      if ($client->exists($plural.'-single.vue')) {
-        if (!$this->confirm($plural.'-single.vue already exists. Would you like to overwrite this component?')) {
+      if ($client->exists($data['plural'].'-single.vue')) {
+        if (!$this->confirm($data['plural'].'-single.vue already exists. Would you like to overwrite this component?')) {
           return false;
         }
       } 
       
-     $formData = $this->createFormData($plural);
+     //$formData = $this->createFormData($plural);
       
   
   
       // Create the file
-      $vueTemplate = view::make('vueApi::vue-single',['singular' => strtolower($singular),'plural'=> strtolower($plural),'htmlForm'=>$formData['htmlForm'],'fields'=>$formData['fields']])->render();
-      $client->put($plural.'-single.vue', $vueTemplate );
+      $vueTemplate = view::make('vueApi::vue-single',['data' =>$data])->render();
+      $client->put($data['plural'].'-single.vue', $vueTemplate );
       
       return;
       
       
     }
     
-    public function createRoutes($singular, $plural){
+    public function createRoutes($data){
       
       $client = Storage::createLocalDriver(['root' => config('vueApi.routes_dir')]);
-      $plural = Ucfirst(strtolower($plural));
-      $routes = "\nRoute::get('".$plural."', '".$plural."Controller@list');\n";
-      $routes .= "Route::get('".$plural."/{id}', '".$plural."Controller@get');\n";
-      $routes .= "Route::post('".$plural."', '".$plural."Controller@create');\n";
-      $routes .= "Route::put('".$plural."/{id}', '".$plural."Controller@update');\n";
-      $routes .= "Route::delete('".$plural."/{id}', '".$plural."Controller@delete');\n";
+      $plural = Ucfirst(strtolower($data['plural']));
+      $routes = "\nRoute::get('".$data['plural']."', '".$plural."Controller@list');\n";
+      $routes .= "Route::get('".$data['plural']."/{id}', '".$plural."Controller@get');\n";
+      $routes .= "Route::post('".$data['plural']."', '".$plural."Controller@create');\n";
+      $routes .= "Route::put('".$data['plural']."/{id}', '".$plural."Controller@update');\n";
+      $routes .= "Route::delete('".$data['plural']."/{id}', '".$plural."Controller@delete');\n";
       
       if ($client->exists(config('vueApi.routes_file'))) {
         $routeFile = $client->get('/'.config('vueApi.routes_file'));
@@ -159,6 +153,56 @@ class generate extends Command
         $client->put(config('vueApi.routes_file'), $routes);
       }
       
+      
+      
+      
+    }
+    
+    public function getFieldsData($singular, $plural){
+      
+      $data = DB::select('DESCRIBE '.strtolower($plural));
+      
+      
+      $fieldsArray = array();
+      $i = 0;
+      foreach ($data as $key) {
+          
+          // Extract if its required
+          $required = ($key->Null == 'NO') ? true : false ;
+          
+          //Extract the field type
+          $type = $typeArr = explode("(", $key->Type, 2)[0];
+
+          //extract the number for the max attribute
+          preg_match_all('!\d+!', $key->Type, $matches);
+          
+          // Setup simplified type arrays
+          $stringArray = ['char','varchar','tinystring'];
+          $textAreaArray = ['text','mediumtext','longtext'];
+          $simplifiedType = 'number';
+          
+          if (in_array($type, $stringArray)) {
+            $simplifiedType = 'text';
+          } else if(in_array($type, $textAreaArray)){
+            $simplifiedType = 'textarea';
+          }
+          
+          $fieldsArray[$i]['name'] = $key->Field;
+          $fieldsArray[$i]['type'] = $type;
+          $fieldsArray[$i]['simplified_type'] = $simplifiedType;
+          $fieldsArray[$i]['required'] = $required;
+          $fieldsArray[$i]['max'] = (isset($matches[0][0])) ? (int)$matches[0][0] : false;
+        
+        $i++;
+      };
+      
+      return array(
+        'singular' => $singular,
+        'plural' => $plural,
+        'singular_lower' => strtolower($singular),
+        'plural_lower' => strtolower($plural),
+        'fields' => $fieldsArray
+      );
       
       
       
@@ -279,15 +323,24 @@ class generate extends Command
       
       
         
-        $singular = Str::camel($this->argument('model'));
+        $singular = strtolower(Str::camel($this->argument('model')));
         $singular = Ucfirst(Str::singular($singular));
         $plural = Ucfirst(Str::plural($singular));
         
-        $this->createModel($singular, $plural);
-        $this->createRoutes($singular, $plural);
-        $this->createController($singular, $plural);
-        $this->createVueListTemplate($singular, $plural);
-        $this->createVueSingleTemplate($singular, $plural);
+        
+        
+        //$this->createController($singular, $plural);
+        //$this->createVueListTemplate($singular, $plural);
+        //$this->createVueSingleTemplate($singular, $plural);
+        
+        $data = $this->getFieldsData($singular, $plural);
+        
+        Log::info($data);
+        $this->createRoutes($data);
+        $this->createModel($data);
+        $this->createController($data);
+        $this->createVueListTemplate($data);
+        $this->createVueSingleTemplate($data);
         
         return $this->info('Created '.$singular.'Controller.php, '.$singular.'.vue and the routes in '.config('vueApi.routes_file'));
     

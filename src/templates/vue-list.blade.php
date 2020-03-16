@@ -1,20 +1,20 @@
 <template lang="html">
       <div class="posts">
         
-        <h1>Get {{ $plural }}</h1>
+        <h1>Get {{ $data['plural'] }}</h1>
         
-        <ul v-if="{{ $plural }}">
-          <li v-for="({{ $singular }},index) in {{ $plural }}" :key="{{ $singular }}.id">
+        <ul v-if="{{ $data['plural'] }}">
+          <li v-for="({{ $data['singular'] }},index) in {{ $data['plural'] }}" :key="{{ $data['singular'] }}.id">
             
-            {{ $singular }} 
-            <a @click.prevent="delete{{$singular}}({{ $singular }},index)" href="#">Delete</a>
+            {{ $data['singular'] }} 
+            <a @click.prevent="delete{{$data['singular']}}({{ $data['singular'] }},index)" href="#">Delete</a>
           </li>
         </ul>
         
-        <h2>Create {{$singular}}</h2>
+        <h2>Create {{$data['singular']}}</h2>
         
-        <form @submit.prevent="create{{ $singular }}">
-        {!! $htmlForm !!}
+        <form @submit.prevent="create{{ $data['singular'] }}">
+      
           <div class="form-group">
               <button type="submit" :disabled="form.busy" name="button">@{{ (form.busy) ? 'Please wait...' : 'Submit'}}</button>
           </div>
@@ -26,40 +26,42 @@
 <script>
 import { Form, HasError, AlertError } from 'vform'
 export default {
-  name: '{{ $singular }}',
+  name: '{{ $data['singular'] }}',
   components: {HasError},
   data: function(){
     return {
-      {{ $plural }} : [],
-      form: new Form(@json($fields,JSON_PRETTY_PRINT))
+      {{ $data['plural_lower'] }} : [],
+      form: new Form({
+        
+      })
     }
   },
   created: function(){
-    this.list{{$plural}}();
+    this.list{{$data['plural']}}();
   },
   methods: {
-    list{{ $plural }}: function(){
+    list{{ $data['plural'] }}: function(){
       
       var that = this;
-      this.form.get('/{{ $plural }}').then(function(response){
-        that.{{ $plural }} = response.data;
+      this.form.get('/{{ $data['plural_lower'] }}').then(function(response){
+        that.{{ $data['plural_lower'] }} = response.data;
       })
       
     },
-    create{{ $singular }}: function(){
+    create{{ $data['singular'] }}: function(){
       
       var that = this;
-      this.form.post('/{{ $plural }}').then(function(response){
-        that.{{ $plural }}.push(response.data);
+      this.form.post('/{{ $data['plural_lower'] }}').then(function(response){
+        that.{{ $data['plural_lower'] }}.push(response.data);
       })
       
     },
-    delete{{$singular}}: function({{ $singular }}, index){
+    delete{{$data['singular']}}: function({{ $data['singular'] }}, index){
       
       var that = this;
-      this.form.delete('/{{ $plural }}/'+{{ $singular }}.id).then(function(response){
+      this.form.delete('/{{ $data['plural_lower'] }}/'+{{ $data['singular'] }}.id).then(function(response){
         
-        that.{{ $plural }}.splice(index,1);
+        that.{{ $data['plural_lower'] }}.splice(index,1);
         
       })
       
@@ -69,7 +71,7 @@ export default {
 </script>
 
 <style lang="less">
-.{{ $plural }}{
+.{{ $data['plural'] }}{
   
 }
 </style>

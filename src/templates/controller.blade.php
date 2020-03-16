@@ -1,58 +1,38 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\{{ $plural }};
+use App\{{ $data['plural'] }};
 
-class {{ $plural }}Controller extends Controller
+class {{ $data['plural'] }}Controller extends Controller
 {
     public function get(Request $request, $id){
-      return {{ $plural }}::findOrFail($id);
+      return {{ $data['plural'] }}::findOrFail($id);
     }
     
     public function list(Request $request){
-      return {{ $plural }}::get();
+      return {{ $data['plural'] }}::get();
     }
     
     public function create(Request $request){
           
-          $validatedData = $request->validate([
-          @foreach ($validatorString[0] as $key => $value)
-              '{{ $key }}' => '{{ $value }}',
-          @endforeach
-          ],[
-          @foreach ($validatorString[1] as $key => $value)
-              '{{ $key }}' => '{{ $value }}',
-          @endforeach
-          ]);
       
         $input = $request->all();
-        ${{ $plural }} = {{ $plural }}::create($input)->save();
-        ${{ $plural }}->save();
+        ${{ $data['plural'] }} = {{ $data['plural'] }}::create($input)->save();
+        ${{ $data['plural'] }}->save();
         
-        return ${{ $plural }};
+        return ${{ $data['plural'] }};
     }
     
     public function update(Request $request, $id){
-        
-      $validatedData = $request->validate([
-      @foreach ($validatorString[0] as $key => $value)
-          '{{ $key }}' => '{{ $value }}',
-      @endforeach
-      ],[
-      @foreach ($validatorString[1] as $key => $value)
-          '{{ $key }}' => '{{ $value }}',
-      @endforeach
-      ]);
-      
-      
-        ${{ $plural }} = {{ $plural }}::findOrFail($id);
+
+        ${{ $data['plural'] }} = {{ $data['plural'] }}::findOrFail($id);
         $input = $request->all();
-        ${{ $plural }}->fill($input)->save();
-        return ${{ $plural }};
+        ${{ $data['plural'] }}->fill($input)->save();
+        return ${{ $data['plural'] }};
     }
     
     public function delete(Request $request, $id){
-        ${{$plural}} = {{$plural}}::findOrFail($id);
-        ${{$plural}}->delete();
+        ${{$data['plural']}} = {{$data['plural']}}::findOrFail($id);
+        ${{$data['plural']}}->delete();
     }
 }

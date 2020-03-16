@@ -1,11 +1,11 @@
 <template lang="html">
-      <div class="{{ $singular }}">
+      <div class="{{ $data['singular'] }}">
         
-        <form @submit.prevent="update{{$singular}}">
-        {!! $htmlForm !!}
+        <form @submit.prevent="update{{$data['singular']}}">
+      
           <div class="form-group">
               <button type="submit" :disabled="form.busy" name="button">@{{ (form.busy) ? 'Please wait...' : 'Update'}}</button>
-              <button @click.prevent="delete{{$singular}}">@{{ (form.busy) ? 'Please wait...' : 'Delete'}}</button>
+              <button @click.prevent="delete{{$data['singular']}}">@{{ (form.busy) ? 'Please wait...' : 'Delete'}}</button>
           </div>
         </form>
       </div>
@@ -14,39 +14,41 @@
 <script>
 import { Form, HasError, AlertError } from 'vform'
 export default {
-  name: '{{ $singular }}',
+  name: '{{ $data['singular'] }}',
   components: {HasError},
   data: function(){
     return {
-      {{ $singular }}: false,
-      {{ $plural }} : false,
-      form: new Form(@json($fields,JSON_PRETTY_PRINT))
+      {{ $data['singular_lower'] }}: false,
+      {{ $data['plural_lower'] }} : false,
+      form: new Form(
+        
+      )
     }
   },
   created: function(){
-    this.get{{$singular}}();
+    this.get{{$data['singular']}}();
   },
   methods: {
-    get{{$singular}}: function({{$singular}}){
+    get{{$data['singular']}}: function({{$data['singular']}}){
       
       var that = this;
-      this.form.get('/{{ $plural }}/'+this.$route.params.id).then(function(response){
+      this.form.get('/{{ $data['plural_lower'] }}/'+this.$route.params.id).then(function(response){
         that.form.fill(response.data);
       })
       
     },
-    update{{$singular}}: function(){
+    update{{$data['singular']}}: function(){
       
       var that = this;
-      this.form.put('/{{ $plural }}/'+this.$route.params.id).then(function(response){
+      this.form.put('/{{ $data['plural_lower'] }}/'+this.$route.params.id).then(function(response){
         that.form.fill(response.data);
       })
       
     },
-    delete{{$singular}}: function(){
+    delete{{$data['singular']}}: function(){
       
       var that = this;
-      this.form.delete('/{{ $plural }}/'+this.$route.params.id).then(function(response){
+      this.form.delete('/{{ $data['plural_lower'] }}/'+this.$route.params.id).then(function(response){
         that.form.fill(response.data);
       })
       
@@ -56,7 +58,7 @@ export default {
 </script>
 
 <style lang="less">
-.{{ $singular }}{
+.{{ $data['singular'] }}{
   
 }
 </style>
