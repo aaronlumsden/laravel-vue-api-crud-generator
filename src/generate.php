@@ -78,8 +78,7 @@ class generate extends Command
             return false;    
         } 
       } 
-      
-    //  $formData = $this->createFormData($plural);
+    
       
       // Create the file
       $controllerTemplate = view::make('vueApi::controller',['data' => $data])->render();
@@ -119,11 +118,7 @@ class generate extends Command
         if (!$this->confirm($data['plural'].'-single.vue already exists. Would you like to overwrite this component?')) {
           return false;
         }
-      } 
-      
-     //$formData = $this->createFormData($plural);
-      
-  
+      }   
   
       // Create the file
       $vueTemplate = view::make('vueApi::vue-single',['data' =>$data])->render();
@@ -137,12 +132,12 @@ class generate extends Command
     public function createRoutes($data){
       
       $client = Storage::createLocalDriver(['root' => config('vueApi.routes_dir')]);
-      $plural = Ucfirst(strtolower($data['plural']));
-      $routes = "\nRoute::get('".$data['plural']."', '".$plural."Controller@list');\n";
-      $routes .= "Route::get('".$data['plural']."/{id}', '".$plural."Controller@get');\n";
-      $routes .= "Route::post('".$data['plural']."', '".$plural."Controller@create');\n";
-      $routes .= "Route::put('".$data['plural']."/{id}', '".$plural."Controller@update');\n";
-      $routes .= "Route::delete('".$data['plural']."/{id}', '".$plural."Controller@delete');\n";
+      
+      $routes = "\nRoute::get('".$data['plural_lower']."', '".$data['plural']."Controller@list');\n";
+      $routes .= "Route::get('".$data['plural_lower']."/{id}', '".$data['plural']."Controller@get');\n";
+      $routes .= "Route::post('".$data['plural_lower']."', '".$data['plural']."Controller@create');\n";
+      $routes .= "Route::put('".$data['plural_lower']."/{id}', '".$data['plural']."Controller@update');\n";
+      $routes .= "Route::delete('".$data['plural_lower']."/{id}', '".$data['plural']."Controller@delete');\n";
       
       if ($client->exists(config('vueApi.routes_file'))) {
         $routeFile = $client->get('/'.config('vueApi.routes_file'));
@@ -327,15 +322,9 @@ class generate extends Command
         $singular = Ucfirst(Str::singular($singular));
         $plural = Ucfirst(Str::plural($singular));
         
-        
-        
-        //$this->createController($singular, $plural);
-        //$this->createVueListTemplate($singular, $plural);
-        //$this->createVueSingleTemplate($singular, $plural);
-        
         $data = $this->getFieldsData($singular, $plural);
         
-        Log::info($data);
+    
         $this->createRoutes($data);
         $this->createModel($data);
         $this->createController($data);
