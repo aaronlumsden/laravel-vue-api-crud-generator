@@ -6,19 +6,9 @@ use Illuminate\Console\Command;
 use Str;
 use Storage;
 use View;
-use Log;
 use DB;
 use Artisan;
 
-//composer dump-autoload
-// To publish config file 
-// php artisan vendor:publish --provider="lummy\vueApi\vueApiServiceProvider" --tag="config"
-
-// generate Model 
-// Generates a Controller (list,get,create,update,delete)
-// Generates a model 
-// Generates the routes
-// Generates the vue.js template with axios and validation
 
 class generate extends Command
 {

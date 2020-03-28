@@ -10,8 +10,8 @@ class {{ $data['plural'] }} extends Model
      *
      * @var array
      */
-    protected $hidden = [
-        ''
+    protected $guarded = [
+        'id'
     ];
 
     /**
@@ -20,6 +20,6 @@ class {{ $data['plural'] }} extends Model
      * @var array
      */
     protected $casts = [
-        '',
+        ''
     ];
 }

@@ -65,61 +65,59 @@ Based on a `posts` DB table it will produce this controller
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Post;
+use App\Posts;
 
-class Post extends Controller
+class PostsController extends Controller
 {
     public function get(Request $request, $id){
-      return Post::findOrFail($id);
+      return Posts::findOrFail($id);
     }
     
     public function list(Request $request){
-      return Post::get();
+      return Posts::get();
     }
     
     public function create(Request $request){
-          
-          $validatedData = $request->validate([
-                        'id' => 'size:20',
-                        'title' => 'size:200',
-                        'content' => 'required',
-                        'created_at' => 'required',
-                        'updated_at' => 'required',
-                    ],[
-                        'content.required' => 'Please ensure you have filled in content',
-                        'created_at.required' => 'Please ensure you have filled in created_at',
-                        'updated_at.required' => 'Please ensure you have filled in updated_at',
-                    ]);
-      
-        $input = $request->all();
-        $Post = Post::create($input)->save();
-        return $Post;
+        
+      $validatedData = $request->validate([
+        'title' => 'required |max:200 ',
+        'content' => 'required ',
+        'meta_description' => 'required |max:160 ',
+      ],[
+        'title.required' => 'title is a required field.',
+        'title.max' => 'title can only be 200 characters.',
+        'content.required' => 'content is a required field.',
+        'meta_description.required' => 'meta_description is a required field.',
+        'meta_description.max' => 'meta_description can only be 160 characters.',
+      ]);
+
+        $posts = Posts::create($request->all());    
+        return $posts;
     }
     
     public function update(Request $request, $id){
-        
+      
       $validatedData = $request->validate([
-                'id' => 'size:20',
-                'title' => 'size:200',
-                'content' => 'required',
-                'created_at' => 'required',
-                'updated_at' => 'required',
-            ],[
-                'content.required' => 'Please ensure you have filled in content',
-                'created_at.required' => 'Please ensure you have filled in created_at',
-                'updated_at.required' => 'Please ensure you have filled in updated_at',
-            ]);
-      
-      
-        $Post = Post::findOrFail($id);
+        'title' => 'required |max:200 ',
+        'content' => 'required ',
+        'meta_description' => 'required |max:160 ',
+      ],[
+        'title.required' => 'title is a required field.',
+        'title.max' => 'title can only be 200 characters.',
+        'content.required' => 'content is a required field.',
+        'meta_description.required' => 'meta_description is a required field.',
+        'meta_description.max' => 'meta_description can only be 160 characters.',
+      ]);
+
+        $posts = Posts::findOrFail($id);
         $input = $request->all();
-        $Post->fill($input)->save();
-        return $Post;
+        $posts->fill($input)->save();
+        return $posts;
     }
     
     public function delete(Request $request, $id){
-        $Post = Post::findOrFail($id);
-        $Post->destroy();
+        $posts = Posts::findOrFail($id);
+        $posts->delete();
     }
 }
  ?>
@@ -135,24 +133,16 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Songs extends Model
+class Posts extends Model
 {
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var  array
-     */
-    protected $fillable = [
-        'name', 'email', 'password',
-    ];
 
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var  array
      */
-    protected $hidden = [
-        'password', 'remember_token',
+    protected $guarded = [
+        'id'
     ];
 
     /**
@@ -161,64 +151,83 @@ class Songs extends Model
      * @var  array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        ''
     ];
-} ?>
+}?>
 
 ```
 
 ### Vue (List template)
 
-Based on a `posts` DB table it will produce this Vue.js list single file component
+Based on a `posts` DB table it will produce this Vue.js list single file component (Posts-list.vue)
 
 ```
-
 <template lang="html">
       <div class="posts">
         
-        <h1>Get posts</h1>
-        
-        <ul v-if="posts">
-          <li v-for="(post,index) in posts" :key="post.id">
+        <div class="half">
+          
+          <h1>Create post</h1>
+          
+          <form @submit.prevent="createPost">
             
-            post
-            <a @click.prevent="deletepost(post)" href="#">Delete</a>
-          </li>
-        </ul>
+            <div class="form-group">
+   
+                  <input type="hidden" v-model="form.id"></input>
+            </div>
+            <div class="form-group">
+                  <label>title</label>
+                  <input type="text" v-model="form.title"  maxlength="200" ></input>
+                  <has-error :form="form" field="title"></has-error>
+            </div>
+            <div class="form-group">
+                  <label>content</label>
+                  <textarea v-model="form.content" ></textarea>
+                  <has-error :form="form" field="content"></has-error>
+            </div>
+            <div class="form-group">
+                  <label>meta_description</label>
+                  <input type="text" v-model="form.meta_description"  maxlength="160" ></input>
+                  <has-error :form="form" field="meta_description"></has-error>
+            </div>
+            <div class="form-group">
+   
+                  <input type="hidden" v-model="form.created_at"></input>
+            </div>
+            <div class="form-group">
+   
+                  <input type="hidden" v-model="form.updated_at"></input>
+            </div>
         
-        <h2>Create post</h2>
+            <div class="form-group">
+                <button class="button" type="submit" :disabled="form.busy" name="button">{{ (form.busy) ? 'Please wait...' : 'Submit'}}</button>
+            </div>
+          </form>
+          
+        </div><!-- End first half -->
         
-        <form @submit.prevent="createpost">
-        					<div class='form-group'>
-						<label>id</label>
-						<input type='number' 'maxlength=20' placeholder='id' v-model='form.id'/>
-					</div>
+        <div class="half">
+          
+          <h1>List posts</h1>
+          
+          <ul v-if="posts.length > 0">
+            <li v-for="(post,index) in posts" :key="post.id">
+              
+            <router-link :to="'/post/'+post.id">
+              
+              post {{ index }}
 
-					<div class='form-group'>
-						<label>title</label>
-						<input type='text' 'maxlength=200' placeholder='title' v-model='form.title'/>
-					</div>
-
-					<div class='form-group'>
-						<label>content</label>
-						<textarea  placeholder='content' v-model='form.content'/></textarea>
-					</div>
-
-					<div class='form-group'>
-						<label>created_at</label>
-						<input type='date' placeholder='created_at' v-model='form.created_at'/>
-					</div>
-
-					<div class='form-group'>
-						<label>updated_at</label>
-						<input type='date' placeholder='updated_at' v-model='form.updated_at'/>
-					</div>
-
-
-          <div class="form-group">
-              <button type="submit" :disabled="form.busy" name="button">{{ (form.busy) ? 'Please wait...' : 'Submit'}}</button>
-          </div>
-        </form>
+              <button @click.prevent="deletePost(post,index)" type="button" :disabled="form.busy" name="button">{{ (form.busy) ? 'Please wait...' : 'Delete'}}</button>
+              
+            </router-link>
+              
+            </li>
+          </ul>
+          
+          <span v-else-if="!posts">Loading...</span>
+          <span v-else>No posts exist</span>
+          
+        </div><!-- End 2nd half -->
         
       </div>
 </template>
@@ -226,25 +235,26 @@ Based on a `posts` DB table it will produce this Vue.js list single file compone
 <script>
 import { Form, HasError, AlertError } from 'vform'
 export default {
-  name: 'post',
+  name: 'Post',
   components: {HasError},
   data: function(){
     return {
       posts : false,
       form: new Form({
-    "id": "",
-    "title": "",
-    "content": "",
-    "created_at": "",
-    "updated_at": ""
-})
+          "id" : "",
+          "title" : "",
+          "content" : "",
+          "meta_description" : "",
+          "created_at" : "",
+          "updated_at" : "",
+      })
     }
   },
   created: function(){
-    this.listposts();
+    this.listPosts();
   },
-  methods: function(){
-    listposts: function(){
+  methods: {
+    listPosts: function(){
       
       var that = this;
       this.form.get('/posts').then(function(response){
@@ -252,19 +262,19 @@ export default {
       })
       
     },
-    createpost: function(){
+    createPost: function(){
       
       var that = this;
       this.form.post('/posts').then(function(response){
-        that.form.fill(response.data);
+        that.posts.push(response.data);
       })
       
     },
-    deletepost: function(post){
+    deletePost: function(post, index){
       
       var that = this;
       this.form.delete('/posts/'+post.id).then(function(response){
-        that.form.fill(response.data);
+        that.posts.splice(index,1);
       })
       
     }
@@ -274,95 +284,162 @@ export default {
 
 <style lang="less">
 .posts{
-  
+    margin:0 auto;
+    width:700px;
+    display:flex;
+    .half{
+      flex:1;
+      &:first-of-type{
+        margin-right:20px;
+      }
+    }
+    form{
+      .form-group{
+        margin-bottom:20px;
+        label{
+          display:block;
+          margin-bottom:5px;
+          text-transform: capitalize;
+        }
+        input[type="text"],input[type="number"],textarea{
+          width:100%;
+          max-width:100%;
+          min-width:100%;
+          padding:10px;
+          border-radius:3px;
+          border:1px solid silver;
+          font-size:1rem;
+          &:focus{
+            outline:0;
+            border-color:blue;
+          }
+        }
+        .invalid-feedback{
+          color:red;
+          &::first-letter{
+            text-transform:capitalize;
+          }
+        }
+      }
+      .button{
+        appearance: none;
+        background: #3bdfd9;
+        font-size: 1rem;
+        border: 0px;
+        padding: 10px 20px;
+        border-radius: 3px;
+        font-weight: bold;
+        &:hover{
+          cursor:pointer;
+          background: darken(#3bdfd9,10);
+        }
+      }
+    }
 }
 </style>
 ```
 
 ### Vue (Single template)
 
-Based on a `posts` DB table it will produce this Vue.js single file component
+Based on a `posts` DB table it will produce this Vue.js single file component (Posts-single.vue)
 
 ```
 <template lang="html">
-      <div class="post">
+      <div class="PostSingle">
+        <h1>Update Post</h1>
         
-        <form @submit.prevent="updatepost">
-        					<div class='form-group'>
-						<label>id</label>
-						<input type='number' 'maxlength=20' placeholder='id' v-model='form.id'/>
-					</div>
-
-					<div class='form-group'>
-						<label>title</label>
-						<input type='text' 'maxlength=200' placeholder='title' v-model='form.title'/>
-					</div>
-
-					<div class='form-group'>
-						<label>content</label>
-						<textarea  placeholder='content' v-model='form.content'/></textarea>
-					</div>
-
-					<div class='form-group'>
-						<label>created_at</label>
-						<input type='date' placeholder='created_at' v-model='form.created_at'/>
-					</div>
-
-					<div class='form-group'>
-						<label>updated_at</label>
-						<input type='date' placeholder='updated_at' v-model='form.updated_at'/>
-					</div>
-
-
+        <form @submit.prevent="updatePost" v-if="loaded">
+          
+          <router-link to="/posts">< Back to posts</router-link>
+          
+            <div class="form-group">
+   
+                  <input type="hidden" v-model="form.id"></input>
+            </div>
+            <div class="form-group">
+                  <label>title</label>
+                  <input type="text" v-model="form.title"  maxlength="200" ></input>
+                  <has-error :form="form" field="title"></has-error>
+            </div>
+            <div class="form-group">
+                  <label>content</label>
+                  <textarea v-model="form.content" ></textarea>
+                  <has-error :form="form" field="content"></has-error>
+            </div>
+            <div class="form-group">
+                  <label>meta_description</label>
+                  <input type="text" v-model="form.meta_description"  maxlength="160" ></input>
+                  <has-error :form="form" field="meta_description"></has-error>
+            </div>
+            <div class="form-group">
+   
+                  <input type="hidden" v-model="form.created_at"></input>
+            </div>
+            <div class="form-group">
+   
+                  <input type="hidden" v-model="form.updated_at"></input>
+            </div>
+      
           <div class="form-group">
-              <button type="submit" :disabled="form.busy" name="button">{{ (form.busy) ? 'Please wait...' : 'Submit'}}</button>
+              <button class="button" type="submit" :disabled="form.busy" name="button">{{ (form.busy) ? 'Please wait...' : 'Update'}}</button>
+              <button @click.prevent="deletePost">{{ (form.busy) ? 'Please wait...' : 'Delete'}}</button>
           </div>
         </form>
+        
+        <span v-else>Loading post...</span>
       </div>
 </template>
 
 <script>
 import { Form, HasError, AlertError } from 'vform'
 export default {
-  name: 'post',
+  name: 'Post',
   components: {HasError},
   data: function(){
     return {
-      post: false,
-      posts : false,
+      loaded: false,
       form: new Form({
-    "id": "",
-    "title": "",
-    "content": "",
-    "created_at": "",
-    "updated_at": ""
-})
+          "id" : "",
+          "title" : "",
+          "content" : "",
+          "meta_description" : "",
+          "created_at" : "",
+          "updated_at" : "",
+        
+      })
+    }
   },
   created: function(){
-    this.getpost();
+    this.getPost();
   },
-  methods: function(){
-    getpost: function(post){
+  methods: {
+    getPost: function(Post){
       
       var that = this;
-      this.form.get('/posts/'+post.id).then(function(response){
+      this.form.get('/posts/'+this.$route.params.id).then(function(response){
+        that.form.fill(response.data);
+        that.loaded = true;
+      }).catch(function(e){
+          if (e.response && e.response.status == 404) {
+              that.$router.push('/404');
+          }
+      });
+      
+    },
+    updatePost: function(){
+      
+      var that = this;
+      this.form.put('/posts/'+this.$route.params.id).then(function(response){
         that.form.fill(response.data);
       })
       
     },
-    updatepost: function(){
+    deletePost: function(){
       
       var that = this;
-      this.form.put('/posts/'+form.id).then(function(response){
+      this.form.delete('/posts/'+this.$route.params.id).then(function(response){
         that.form.fill(response.data);
-      })
-      
-    },
-    deletepost: function(){
-      
-      var that = this;
-      this.form.delete('/posts/'+form.id).then(function(response){
-        that.form.fill(response.data);
+        that.$router.push('/posts');
       })
       
     }
@@ -371,11 +448,53 @@ export default {
 </script>
 
 <style lang="less">
-.post{
-  
+.PostSingle{
+  margin:0 auto;
+  width:700px;
+  form{
+    .form-group{
+      margin-bottom:20px;
+      label{
+        display:block;
+        margin-bottom:5px;
+        text-transform: capitalize;
+      }
+      input[type="text"],input[type="number"],textarea{
+        width:100%;
+        max-width:100%;
+        min-width:100%;
+        padding:10px;
+        border-radius:3px;
+        border:1px solid silver;
+        font-size:1rem;
+        &:focus{
+          outline:0;
+          border-color:blue;
+        }
+      }
+      .button{
+        appearance: none;
+        background: #3bdfd9;
+        font-size: 1rem;
+        border: 0px;
+        padding: 10px 20px;
+        border-radius: 3px;
+        font-weight: bold;
+        &:hover{
+          cursor:pointer;
+          background: darken(#3bdfd9,10);
+        }
+      }
+      .invalid-feedback{
+        color:red;
+        &::first-letter{
+          text-transform:capitalize;
+        }
+      }
+    }
+  }
 }
 </style>
-
 ```
 
 ## Configuration
@@ -425,22 +544,41 @@ They will then appear in
 `\resources\views\vendor\vueApi`
 
 
-#### Variables in the templates
+### Variables in the templates
 
-##### $singular (all templates)
-The singular name for the DB table eg post
+Each template file passes a data array with the following fields
 
-##### $plural (all templates)
-The singular name for the DB table eg posts
+##### $data['singular']
+The singular name for the DB table eg Post
 
-##### $validatorString (Controller template)
-This outputs the array for Laravel validation
+##### $data['plural']
+The plural name for the DB table eg Posts
 
-##### $htmlForm (Vue-list & Vue-single)
-This outputs the html form
+##### $data['singular_lower']
+The singular name for the DB table (lowercase) eg post
 
-##### $fields (Vue-list & Vue-single)
-This outputs a javascript object of the fields
+##### $data['plural_lower']
+The plural name for the DB table eg (lowercase) eg posts
+
+##### $data['fields']
+An array of the fields that are part of the model.
+
+ - name (the field name)
+ - type (the mysql varchar, int etc)
+ - simplified_type (text, textarea, number)
+ - required (is the field required)
+ - max (the maximum number of characters)
+ 
+### Other things to note
+ 
+I have only tested this on Laravel MYSQL driver so I'm not sure if it will work on other databases.
+ 
+In Vue.js files the routes are presumed to be: using the posts example. You can easily configure these from the templates generated
+ 
+/posts (Posts-list.vue)
+/posts/{id} (Posts-single.vue)
+
+Please feel free to contact me with any  feedback or suggestions https://github.com/aarondo
 
 
 
