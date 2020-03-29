@@ -88,7 +88,7 @@ export default {
     list{{ $data['plural'] }}: function(){
       
       var that = this;
-      this.form.get('/{{ $data['plural_lower'] }}').then(function(response){
+      this.form.get('{{config('vueApi.vue_url_prefix')}}/{{ $data['plural_lower'] }}').then(function(response){
         that.{{ $data['plural_lower'] }} = response.data;
       })
       
@@ -96,7 +96,7 @@ export default {
     create{{ $data['singular'] }}: function(){
       
       var that = this;
-      this.form.post('/{{ $data['plural_lower'] }}').then(function(response){
+      this.form.post('{{config('vueApi.vue_url_prefix')}}/{{ $data['plural_lower'] }}').then(function(response){
         that.{{ $data['plural_lower'] }}.push(response.data);
       })
       
@@ -104,7 +104,7 @@ export default {
     delete{{$data['singular']}}: function({{ $data['singular_lower'] }}, index){
       
       var that = this;
-      this.form.delete('/{{ $data['plural_lower'] }}/'+{{ $data['singular_lower'] }}.id).then(function(response){
+      this.form.delete('{{config('vueApi.vue_url_prefix')}}/{{ $data['plural_lower'] }}/'+{{ $data['singular_lower'] }}.id).then(function(response){
         that.{{ $data['plural_lower'] }}.splice(index,1);
       })
       

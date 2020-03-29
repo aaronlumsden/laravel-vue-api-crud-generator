@@ -64,7 +64,7 @@ export default {
     get{{$data['singular']}}: function({{$data['singular']}}){
       
       var that = this;
-      this.form.get('/{{ $data['plural_lower'] }}/'+this.$route.params.id).then(function(response){
+      this.form.get('{{config('vueApi.vue_url_prefix')}}/{{ $data['plural_lower'] }}/'+this.$route.params.id).then(function(response){
         that.form.fill(response.data);
         that.loaded = true;
       }).catch(function(e){
@@ -77,7 +77,7 @@ export default {
     update{{$data['singular']}}: function(){
       
       var that = this;
-      this.form.put('/{{ $data['plural_lower'] }}/'+this.$route.params.id).then(function(response){
+      this.form.put('{{config('vueApi.vue_url_prefix')}}/{{ $data['plural_lower'] }}/'+this.$route.params.id).then(function(response){
         that.form.fill(response.data);
       })
       
@@ -85,7 +85,7 @@ export default {
     delete{{$data['singular']}}: function(){
       
       var that = this;
-      this.form.delete('/{{ $data['plural_lower'] }}/'+this.$route.params.id).then(function(response){
+      this.form.delete('{{config('vueApi.vue_url_prefix')}}/{{ $data['plural_lower'] }}/'+this.$route.params.id).then(function(response){
         that.form.fill(response.data);
         that.$router.push('/{{$data['plural_lower']}}');
       })

@@ -527,6 +527,9 @@ Specifies the location where the generated controller files should be stored
 
 Specifies the location where the Vue single file templates should be stored
 
+#### vue_url_prefix
+Specifies what prefix should be added to the URL in your view files. The default is `/api` ie `/api/posts`
+
 #### routes_dir
 Specifies the location of the routes directory
 
